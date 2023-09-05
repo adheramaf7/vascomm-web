@@ -168,7 +168,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                                     <Text fontSize="xs" color="gray.600">
                                         Hello, Admin
                                     </Text>
-                                    <Text fontSize="sm">Justina Clark</Text>
+                                    <Text fontSize="sm">{user.name}</Text>
                                 </VStack>
                                 <Avatar size={"sm"} name={user.name} />
                                 {/* <Box display={{ base: "none", md: "flex" }}>

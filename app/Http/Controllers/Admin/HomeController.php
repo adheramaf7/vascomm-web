@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,11 +19,11 @@ class HomeController extends Controller
             'products_count' => Product::active()->count(),
             'active_products_count' => Product::active()->count(),
         ];
-        $latestTenProducts = Product::latest()->limit(10)->get();
+        $tenLatestProducts = Product::latest()->limit(10)->get();
 
         return inertia('Dashboard', [
             'stats' => fn () => $stats,
-            'latestProducts' => fn () => $latestTenProducts,
+            'latestProducts' => fn () => ProductResource::collection($tenLatestProducts),
         ]);
     }
 }

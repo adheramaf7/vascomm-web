@@ -24,6 +24,7 @@ export default function ModalForm({
     clearProduct,
 }) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
+        _method: "POST",
         name: "",
         price: "",
         photo: null,
@@ -32,6 +33,7 @@ export default function ModalForm({
     useEffect(() => {
         if (product) {
             setData({
+                _method: "PUT",
                 name: product.name,
                 price: product.price,
                 photo: null,
@@ -46,7 +48,7 @@ export default function ModalForm({
         e.preventDefault();
 
         if (product) {
-            put(route("products.update", product.id), {
+            post(route("products.update", product.id), {
                 onSuccess: function (page) {
                     onModalFormClose();
                     reset();

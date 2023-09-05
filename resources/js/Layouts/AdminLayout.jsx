@@ -80,7 +80,8 @@ const NavItem = ({ icon, url, children, ...rest }) => {
     return (
         <Box
             as="a"
-            href={url}
+            href={"javascript:;"}
+            onClick={(e) => router.visit(url)}
             style={{ textDecoration: "none" }}
             _focus={{ boxShadow: "none" }}
         >

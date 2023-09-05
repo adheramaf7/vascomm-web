@@ -38,7 +38,7 @@ class ProductController extends Controller
         if (isset($data['photo']) && $data['photo'] instanceof UploadedFile) {
             $data['photo'] = Storage::putFile('public/products', $data['photo']);
         }
-        $product = $product->update($request->validated());
+        $product = $product->update($data);
 
         return redirect()->back()->with(['message' => 'Product Updated', 'type' => 'success']);
     }

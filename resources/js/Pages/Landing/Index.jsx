@@ -11,44 +11,9 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import BannerImage from "@/images/banner.png";
-import Product1Image from "@/images/product-1.png";
-import Product2Image from "@/images/product-2.png";
 import ProductCard from "@/Components/ProductCard";
 
-const products = [
-    {
-        id: 1,
-        name: "Eudora",
-        price: 200000,
-        photo: Product1Image,
-    },
-    {
-        id: 2,
-        name: "Eudore",
-        price: 200000,
-        photo: Product2Image,
-    },
-    {
-        id: 3,
-        name: "Eudoru",
-        price: 200000,
-        photo: Product1Image,
-    },
-    {
-        id: 4,
-        name: "Eudori",
-        price: 200000,
-        photo: Product2Image,
-    },
-    {
-        id: 5,
-        name: "Eudoro",
-        price: 200000,
-        photo: Product2Image,
-    },
-];
-
-const NewProductSection = function () {
+const NewProductSection = function ({ products }) {
     return (
         <Stack w="full" mb={4}>
             <Heading as={"h2"} fontSize={"3xl"} mb={10} mt="10">
@@ -63,7 +28,7 @@ const NewProductSection = function () {
     );
 };
 
-const AvailableProductSection = function () {
+const AvailableProductSection = function ({ products }) {
     return (
         <Stack w="full" mb={4}>
             <Heading as={"h2"} fontSize={"3xl"} mb={10} mt="10">
@@ -87,7 +52,7 @@ const AvailableProductSection = function () {
     );
 };
 
-export default function Landing() {
+export default function Landing({ newProducts, allProducts }) {
     return (
         <>
             <Head title="Welcome" />
@@ -96,8 +61,8 @@ export default function Landing() {
                 <Box>
                     <Image src={BannerImage} />
                 </Box>
-                <NewProductSection />
-                <AvailableProductSection />
+                <NewProductSection products={newProducts} />
+                <AvailableProductSection products={allProducts} />
             </VStack>
             <Footer />
         </>

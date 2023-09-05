@@ -34,6 +34,7 @@ export default function ModalForm({
             setData({
                 name: product.name,
                 price: product.price,
+                photo: null,
             });
             onOpen();
         } else {

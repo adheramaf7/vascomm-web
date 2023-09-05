@@ -1,6 +1,12 @@
 import AdminLayout from "@/Layouts/AdminLayout";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogOverlay,
     Badge,
     Button,
     HStack,
@@ -21,7 +27,7 @@ import {
 } from "@chakra-ui/react";
 import { Head, router } from "@inertiajs/react";
 import { FiCheck, FiEye } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalForm from "@/Pages/Products/ModalForm";
 
 export default function Index({ products, flash }) {
@@ -30,11 +36,12 @@ export default function Index({ products, flash }) {
         onOpen: onModalFormOpen,
         onClose: onModalFormClose,
     } = useDisclosure();
-    // const {
-    //     isOpen: isModalDetailOpen,
-    //     onOpen: onModalDetailOpen,
-    //     onClose: onModalDetailClose,
-    // } = useDisclosure();
+    const {
+        isOpen: isAlertDeleteOpen,
+        onOpen: onAlertDeleteOpen,
+        onClose: onAlertDeleteClose,
+    } = useDisclosure();
+    const cancelRef = useRef();
     const [selectedEdit, setSelectedEdit] = useState(null);
     const [selectedDelete, setSelectedDelete] = useState(null);
     const toast = useToast();
@@ -49,6 +56,25 @@ export default function Index({ products, flash }) {
             });
         }
     }, [flash]);
+
+    useEffect(() => {
+        if (selectedDelete) {
+            onAlertDeleteOpen();
+        }
+    }, [selectedDelete]);
+
+    const closeAlertDelete = function () {
+        setSelectedDelete(null);
+        onAlertDeleteClose();
+    };
+
+    const deleteProduct = function () {
+        router.delete(route("products.destroy", selectedDelete.id), {
+            onSuccess: function (page) {
+                closeAlertDelete();
+            },
+        });
+    };
 
     return (
         <>
@@ -168,6 +194,40 @@ export default function Index({ products, flash }) {
                     setSelectedEdit(null);
                 }}
             />
+
+            <AlertDialog
+                isOpen={isAlertDeleteOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={closeAlertDelete}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Produk
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Apakah anda yakin untuk menghapus produk{" "}
+                            <Text fontWeight={"semibold"}>
+                                {selectedDelete?.name}
+                            </Text>
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={closeAlertDelete}>
+                                Cancel
+                            </Button>
+                            <Button
+                                colorScheme="red"
+                                onClick={deleteProduct}
+                                ml={3}
+                            >
+                                Delete
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </>
     );
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,5 +31,10 @@ class Product extends Model
                 return !is_null($this->photo) ? Storage::url($this->photo) : null;
             },
         );
+    }
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
     }
 }

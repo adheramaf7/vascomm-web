@@ -36,9 +36,9 @@ import {
 } from "react-icons/fi";
 
 const LinkItems = [
-    { name: "Dashboard", icon: FiHome },
-    { name: "Manajemen User", icon: FiUser },
-    { name: "Manajemen Produk", icon: FiBook },
+    { name: "Dashboard", icon: FiHome, url: "/dashboard" },
+    { name: "Manajemen User", icon: FiUser, url: "/users" },
+    { name: "Manajemen Produk", icon: FiBook, url: "/products" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -68,7 +68,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                 />
             </Flex>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} icon={link.icon} url={link.url}>
                     {link.name}
                 </NavItem>
             ))}
@@ -76,11 +76,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
     );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, url, children, ...rest }) => {
     return (
         <Box
             as="a"
-            href="#"
+            href={url}
             style={{ textDecoration: "none" }}
             _focus={{ boxShadow: "none" }}
         >

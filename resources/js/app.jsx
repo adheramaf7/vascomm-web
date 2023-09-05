@@ -18,6 +18,8 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
+        console.log(props.initialPage.props);
+
         root.render(
             <ChakraProvider>
                 <App {...props} />

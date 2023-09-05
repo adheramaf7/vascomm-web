@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
 import Product1Image from "@/images/product-1.png";
+import dayjs from "dayjs";
 
 const StatisticCard = function ({ title, value }) {
     return (
@@ -28,7 +29,7 @@ const StatisticCard = function ({ title, value }) {
     );
 };
 
-const NewProductList = function () {
+const NewProductList = function ({ products }) {
     return (
         <Stack bg="white" rounded="md" p="8">
             <Heading as={"h3"} fontSize={"xl"} mb="4">
@@ -43,23 +44,48 @@ const NewProductList = function () {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr>
-                        <Td>
-                            <HStack>
-                                <Image src={Product1Image} width={10} mr="4" />
-                                <Text>Perfume Eudora</Text>
-                            </HStack>
-                        </Td>
-                        <Td color={"gray.500"}>12 Agustus 2023</Td>
-                        <Td>Rp 12.000</Td>
-                    </Tr>
+                    {products.length === 0 && (
+                        <Tr>
+                            <Td colSpan={3} textAlign={"center"}>
+                                Tidak ada produk baru.
+                            </Td>
+                        </Tr>
+                    )}
+                    {products.map((product) => {
+                        const formattedPrice = new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            maximumFractionDigits: 0,
+                        }).format(product.price);
+
+                        return (
+                            <Tr>
+                                <Td>
+                                    <HStack>
+                                        <Image
+                                            src={product.photo}
+                                            width={10}
+                                            mr="4"
+                                        />
+                                        <Text>{product.name}</Text>
+                                    </HStack>
+                                </Td>
+                                <Td color={"gray.500"}>
+                                    {dayjs(product.created_at).format(
+                                        "DD MMMM YYYY"
+                                    )}
+                                </Td>
+                                <Td>{formattedPrice}</Td>
+                            </Tr>
+                        );
+                    })}
                 </Tbody>
             </Table>
         </Stack>
     );
 };
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ stats, latestProducts }) {
     return (
         <>
             <Head title="Dashboard" />
@@ -73,21 +99,24 @@ export default function Dashboard({ auth }) {
                     Dashboard
                 </Heading>
                 <SimpleGrid columns={4} columnGap={4} mb="8">
-                    <StatisticCard title={"Jumlah User"} value={"150 User"} />
+                    <StatisticCard
+                        title={"Jumlah User"}
+                        value={`${stats.users_count} User`}
+                    />
                     <StatisticCard
                         title={"Jumlah User Aktif"}
-                        value={"150 User"}
+                        value={`${stats.active_users_count} User`}
                     />
                     <StatisticCard
                         title={"Jumlah Produk"}
-                        value={"150 Produk"}
+                        value={`${stats.products_count} Produk`}
                     />
                     <StatisticCard
                         title={"Jumlah Produk Aktif"}
-                        value={"150 Produk"}
+                        value={`${stats.active_products_count} Produk`}
                     />
                 </SimpleGrid>
-                <NewProductList />
+                <NewProductList products={latestProducts} />
             </AdminLayout>
         </>
     );

@@ -20,7 +20,7 @@ class ProductResource extends JsonResource
             'id'          => $this->id,
             'name'        => $this->name,
             'price'       => $this->price,
-            'photo'       => Storage::url($this->photo),
+            'photo'       => $this->photo_url,
             'is_active'   => $this->is_active,
             'created_at'  => Carbon::parse($this->created_at)->toDateTimeLocalString(),
             'updated_at'  => Carbon::parse($this->updated_at)->toDateTimeLocalString(),

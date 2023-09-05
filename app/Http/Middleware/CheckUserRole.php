@@ -14,9 +14,10 @@ class CheckUserRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, UserRoleEnum $role): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!$request->user()->role === $role) {
+        $roleEnum = UserRoleEnum::from($role);
+        if (!$request->user()->role === $roleEnum) {
             abort(403, 'You do not have access to this page');
         }
 

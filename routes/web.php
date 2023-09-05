@@ -33,9 +33,9 @@ Route::redirect('admin', 'dashboard');
 Route::get('login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('login', [LoginController::class, 'store'])->name('login')->middleware('guest');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'check_role:admin']], function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->except(['create', 'edit', 'show', 'destroy']);
     Route::resource('products', ProductController::class);
 
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');

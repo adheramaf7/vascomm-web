@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\UserRoleEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,4 +51,9 @@ class User extends Authenticatable
         'role'              => UserRoleEnum::class,
         'is_active'         => 'boolean',
     ];
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
+    }
 }

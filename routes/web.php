@@ -2,14 +2,12 @@
 
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +33,8 @@ Route::post('login', [LoginController::class, 'store'])->name('login')->middlewa
 
 Route::group(['middleware' => ['auth', 'check_role:admin']], function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+    Route::post('users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show', 'destroy']);
     Route::resource('products', ProductController::class);
 

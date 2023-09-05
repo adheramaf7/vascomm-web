@@ -38,4 +38,12 @@ class UserController extends Controller
 
         return redirect()->back()->with(['message' => 'User Updated', 'type' => 'success']);
     }
+
+    function approve(User $user)
+    {
+        $user->email_verified_at = now();
+        $user->save();
+
+        return redirect()->back()->with(['message' => 'User Approved', 'type' => 'success']);
+    }
 }

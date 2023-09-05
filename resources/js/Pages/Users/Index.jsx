@@ -17,10 +17,11 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
-import { Head } from "@inertiajs/react";
-import { FiEye } from "react-icons/fi";
+import { Head, router } from "@inertiajs/react";
+import { FiCheck, FiEye } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import ModalForm from "@/Pages/Users/ModalForm";
+import ModalDetail from "./ModalDetail";
 
 export default function Index({ users, flash }) {
     const {
@@ -28,7 +29,13 @@ export default function Index({ users, flash }) {
         onOpen: onModalFormOpen,
         onClose: onModalFormClose,
     } = useDisclosure();
+    const {
+        isOpen: isModalDetailOpen,
+        onOpen: onModalDetailOpen,
+        onClose: onModalDetailClose,
+    } = useDisclosure();
     const [selectedUser, setSelectedUser] = useState(null);
+    const [userDetail, setUserDetail] = useState(null);
     const toast = useToast();
 
     useEffect(() => {
@@ -41,6 +48,10 @@ export default function Index({ users, flash }) {
             });
         }
     }, [flash]);
+
+    const approveUser = function (user) {
+        router.post(route("users.approve", user.id));
+    };
 
     return (
         <>
@@ -122,7 +133,22 @@ export default function Index({ users, flash }) {
                                                     mr="2"
                                                     size={"xs"}
                                                     icon={<FiEye />}
+                                                    onClick={(e) =>
+                                                        setUserDetail(user)
+                                                    }
                                                 />
+                                                {!user.is_verified && (
+                                                    <IconButton
+                                                        colorScheme="green"
+                                                        mr="2"
+                                                        size={"xs"}
+                                                        title="Approve"
+                                                        onClick={(e) =>
+                                                            approveUser(user)
+                                                        }
+                                                        icon={<FiCheck />}
+                                                    />
+                                                )}
                                             </Td>
                                         </Tr>
                                     );
@@ -139,6 +165,15 @@ export default function Index({ users, flash }) {
                 user={selectedUser}
                 clearUser={() => {
                     setSelectedUser(null);
+                }}
+            />
+            <ModalDetail
+                isOpen={isModalDetailOpen}
+                onOpen={onModalDetailOpen}
+                onClose={onModalDetailClose}
+                user={userDetail}
+                clearUser={() => {
+                    setUserDetail(null);
                 }}
             />
         </>

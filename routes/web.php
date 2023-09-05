@@ -25,18 +25,18 @@ use Inertia\Inertia;
 Route::get('/', LandingController::class)->name('landing');
 
 
-Route::post('register-customer', [CustomerRegisterController::class, 'store'])->name('customer_register');
-Route::post('login-customer', [CustomerLoginController::class, 'login'])->name('customer_login');
-Route::post('logout-customer', [CustomerLoginController::class, 'logout'])->name('customer_logout');
+Route::post('register-customer', [CustomerRegisterController::class, 'store'])->name('customer_register')->middleware('guest');
+Route::post('login-customer', [CustomerLoginController::class, 'login'])->name('customer_login')->middleware('guest');
+Route::post('logout-customer', [CustomerLoginController::class, 'logout'])->name('customer_logout')->middleware('auth');
 
+Route::redirect('admin', 'dashboard');
+Route::get('login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('login', [LoginController::class, 'store'])->name('login')->middleware('guest');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-
-    Route::get('login', [LoginController::class, 'login'])->name('login');
-    Route::post('login', [LoginController::class, 'login'])->name('login');
-
-    Route::get('home', [HomeController::class, 'index'])->name('home');
-
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
+
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 });

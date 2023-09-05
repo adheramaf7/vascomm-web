@@ -1,21 +1,94 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import AdminLayout from "@/Layouts/AdminLayout";
+import {
+    Box,
+    HStack,
+    Heading,
+    Image,
+    SimpleGrid,
+    Stack,
+    Table,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
+} from "@chakra-ui/react";
+import { Head } from "@inertiajs/react";
+import Product1Image from "@/images/product-1.png";
+
+const StatisticCard = function ({ title, value }) {
+    return (
+        <Box rounded={"md"} px="6" py="8" bgColor={"#C2D6FF"}>
+            <Text fontSize={"sm"} color={"gray.600"}>
+                {title}
+            </Text>
+            <Text fontSize={"xl"}>{value}</Text>
+        </Box>
+    );
+};
+
+const NewProductList = function () {
+    return (
+        <Stack bg="white" rounded="md" p="8">
+            <Heading as={"h3"} fontSize={"xl"} mb="4">
+                Produk Terbaru
+            </Heading>
+            <Table variant={"unstyled"}>
+                <Thead bgColor={"blue.400"} color={"white"} rounded={"lg"}>
+                    <Tr>
+                        <Th width={"50%"}>Produk</Th>
+                        <Th width={"25%"}>Tanggal Dibuat</Th>
+                        <Th width={"25%"}>Harga (RP)</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr>
+                        <Td>
+                            <HStack>
+                                <Image src={Product1Image} width={10} mr="4" />
+                                <Text>Perfume Eudora</Text>
+                            </HStack>
+                        </Td>
+                        <Td color={"gray.500"}>12 Agustus 2023</Td>
+                        <Td>Rp 12.000</Td>
+                    </Tr>
+                </Tbody>
+            </Table>
+        </Stack>
+    );
+};
 
 export default function Dashboard({ auth }) {
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
-        >
+        <>
             <Head title="Dashboard" />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">You're logged in!</div>
-                    </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+            <AdminLayout>
+                <Heading
+                    as={"h2"}
+                    fontSize={"2xl"}
+                    fontWeight={"normal"}
+                    mb="6"
+                >
+                    Dashboard
+                </Heading>
+                <SimpleGrid columns={4} columnGap={4} mb="8">
+                    <StatisticCard title={"Jumlah User"} value={"150 User"} />
+                    <StatisticCard
+                        title={"Jumlah User Aktif"}
+                        value={"150 User"}
+                    />
+                    <StatisticCard
+                        title={"Jumlah Produk"}
+                        value={"150 Produk"}
+                    />
+                    <StatisticCard
+                        title={"Jumlah Produk Aktif"}
+                        value={"150 Produk"}
+                    />
+                </SimpleGrid>
+                <NewProductList />
+            </AdminLayout>
+        </>
     );
 }
